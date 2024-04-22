@@ -1,0 +1,88 @@
+<html>
+    <meta name="viewport" width="device-width" initial-scale="1" />
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script
+        src="https://unpkg.com/htmx.org@1.9.12/dist/ext/client-side-templates.js"></script>
+    <script
+        src="https://unpkg.com/nunjucks@3.2.4"></script>
+    <!-- <script src="https://unpkg.com/mustache@latest"></script> -->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+
+    <body>
+        <header>
+
+            <h3>Thin Controller</h3>
+        </header>
+        <main
+            style="grid-column-start: 1; grid-column-end: -1; padding-left: 1.0em">
+
+            <div hx-ext="client-side-templates">
+                <div hx-get="/api/instances" hx-trigger="load"
+                    hx-swap="innerHTML"
+                    hx-target="#content"
+                    nunjucks-template="instances">
+                    <!-- Click Me -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Region</th>
+                                <th>State</th>
+                                <th>Tags</th>
+                                <th>Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="content">
+                            <tr><td colspan='6'>Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </main>
+            <footer>Stuff.</footer>
+        </body>
+
+        <template id="instances">
+            {% for instance in instances %}
+
+            <tr>
+                <td
+                    style="flex-wrap: nowrap;text-wrap: nowrap">{{instance.id}}</td>
+                <td>{{instance.name}}</td>
+                <td
+                    style="flex-wrap: nowrap;text-wrap: nowrap">{{instance.region}}</td>
+                <td>{{instance.state}}</td>
+                <td>
+                    <ul>
+                        {% for key, value in instance.tags %}
+                        <li>{{key}} = {{value}}</li>
+                        {% endfor %}
+                    </ul>
+
+                </td>
+                <td>
+                    <form method="POST" action="/api/instance">
+
+                        <input type="hidden" name="id"
+                            value="{{instance.id}}" />
+                        <input type="hidden" name="region"
+                            value="{{instance.region}}" />
+                        {% if instance.state=="stopped" %}
+                        <input type='submit' name='new_state' value="start"
+                            id="{{instance.id}}" />
+                        {% elif instance.state=="starting" %}
+                        <input type='submit' name='starting'
+                            disabled>Starting...</input>
+                    {% elif instance.state=="running" %}
+
+                    <input type='submit' name="new_state" value='stop'
+                        style="background-color: green" />
+                    {%endif%}
+
+                </form>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </template>
+</html>
