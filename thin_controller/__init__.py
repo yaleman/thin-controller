@@ -6,7 +6,7 @@ import os
 
 from loguru import logger
 from fastapi import FastAPI, HTTPException, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
 from mangum import Mangum
 from botocore.exceptions import NoCredentialsError, ClientError
 from boto3.session import Session
@@ -26,6 +26,11 @@ def read_root() -> HTMLResponse:
     return HTMLResponse(
         open(os.path.join(os.path.dirname(__file__), "static/index.html")).read()
     )
+
+
+@app.get("/css/styles.css")
+def read_css() -> FileResponse:
+    return FileResponse(os.path.join(os.path.dirname(__file__), "static/styles.css"))
 
 
 MANAGED_INSTANCE_TAG_FILTER = [

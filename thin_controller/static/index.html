@@ -1,21 +1,25 @@
+<!DOCTYPE html>
 <html>
-    <meta name="viewport" width="device-width" initial-scale="1" />
-    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-    <script
-        src="https://unpkg.com/htmx.org@1.9.12/dist/ext/client-side-templates.js"></script>
-    <script
-        src="https://unpkg.com/nunjucks@3.2.4"></script>
-    <!-- <script src="https://unpkg.com/mustache@latest"></script> -->
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <head>
+
+        <meta name="viewport" width="device-width" initial-scale="1" />
+        <meta charset="UTF-8">
+        <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+        <script
+            src="https://unpkg.com/htmx.org@1.9.12/dist/ext/client-side-templates.js"></script>
+        <script
+            src="https://unpkg.com/nunjucks@3.2.4"></script>
+        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
 
     <body>
         <header>
 
             <h3>Thin Controller</h3>
         </header>
-        <main
-            style="grid-column-start: 1; grid-column-end: -1; padding-left: 1.0em">
-
+        <main class="main">
+            <div id="errors" class="error"></div>
             <div hx-ext="client-side-templates">
                 <div hx-get="/api/instances" hx-trigger="load"
                     hx-swap="innerHTML"
@@ -39,7 +43,8 @@
                     </table>
                 </div>
             </main>
-            <footer>Stuff.</footer>
+            <footer><a href="https://github.com/yaleman/thin-controller">Thin
+                    Controller</a></footer>
         </body>
 
         <template id="instances">
@@ -85,4 +90,18 @@
         </tr>
         {% endfor %}
     </template>
+    <script>
+        /* https://htmx.org/events/#htmx:responseError
+
+        if htmx receives an error response from the server, it will trigger an htmx:responseError event on the document object.
+        */
+        document.body.addEventListener('htmx:responseError', function (evt) {
+            const errorData = JSON.parse(evt.detail.xhr.response) || {"detail" : evt.detail.xhr.response};
+            const errorMessage = `Error pulling data: ${errorData.detail}`;
+            let errorDiv = document.getElementById("errors");
+            errorDiv.innerHTML = errorMessage;
+
+            errorDiv.style.display = "block";
+          });
+    </script>
 </html>
