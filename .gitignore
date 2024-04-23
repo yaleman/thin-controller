@@ -18,3 +18,9 @@ dist/
 build/
 *.egg-info/
 **/__pycache__/*
+# terraform/tofu things
+terraform/terraform.tfvars
+terraform/local.tf
+terraform/.terraform/
+terraform/thin_controller_layer/
+terraform/*.zip

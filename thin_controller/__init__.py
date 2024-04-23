@@ -7,7 +7,6 @@ import os
 from loguru import logger
 from fastapi import FastAPI, HTTPException, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
-from mangum import Mangum
 from botocore.exceptions import NoCredentialsError, ClientError
 from boto3.session import Session
 
@@ -16,8 +15,6 @@ from thin_controller.models import AWSInstance, Config
 
 app = FastAPI()
 config = Config()
-
-handler = Mangum(app)
 
 
 @app.get("/")
@@ -31,6 +28,13 @@ def read_root() -> HTMLResponse:
 @app.get("/css/styles.css")
 def read_css() -> FileResponse:
     return FileResponse(os.path.join(os.path.dirname(__file__), "static/styles.css"))
+
+
+@app.get("/css/simple.min.css")
+def read_simple_css() -> FileResponse:
+    return FileResponse(
+        os.path.join(os.path.dirname(__file__), "static/simple.min.css")
+    )
 
 
 MANAGED_INSTANCE_TAG_FILTER = [

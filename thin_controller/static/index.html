@@ -4,12 +4,19 @@
 
         <meta name="viewport" width="device-width" initial-scale="1" />
         <meta charset="UTF-8">
-        <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.12"
+            integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+            crossorigin="anonymous"></script>
         <script
-            src="https://unpkg.com/htmx.org@1.9.12/dist/ext/client-side-templates.js"></script>
+            src="https://unpkg.com/htmx.org@1.9.12/dist/ext/client-side-templates.js"
+            integrity="sha384-UFoZU2py/0EQf37hFN8iBaIC0ojoD9OfXOzMm8uWB16qd6EEQUhhz7cCifKJFsRi"
+            crossorigin="anonymous"></script>
         <script
-            src="https://unpkg.com/nunjucks@3.2.4"></script>
-        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+            src="https://unpkg.com/nunjucks@3.2.4/browser/nunjucks.min.js"
+            integrity="sha384-ZNWDztJihcuTdvvOj/69bJWcalk3vWhHhurVe78xxAbMM8A8rmHY5+eTDWIjWC7Q"
+            crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="/css/simple.min.css"
+            integrity="sha384-JjaRx4XrZf11I2NwckuiPIlqPF39vkQoVTaqZcMoEXaZIIrAW1CTNa8Ty0X79dZl">
         <link rel="stylesheet" href="/css/styles.css">
     </head>
 
@@ -25,7 +32,6 @@
                     hx-swap="innerHTML"
                     hx-target="#content"
                     nunjucks-template="instances">
-                    <!-- Click Me -->
                     <table>
                         <thead>
                             <tr>
@@ -43,7 +49,8 @@
                     </table>
                 </div>
             </main>
-            <footer><a href="https://github.com/yaleman/thin-controller">Thin
+            <footer><a
+                    href="https://github.com/yaleman/thin-controller">Thin
                     Controller</a></footer>
         </body>
 
@@ -52,7 +59,10 @@
 
             <tr>
                 <td
-                    style="flex-wrap: nowrap;text-wrap: nowrap">{{instance.id}}</td>
+                    style="flex-wrap: nowrap;text-wrap: nowrap">
+                    <a
+                        href="https://{{instance.region}}.console.aws.amazon.com/ec2/home?region={{instance.region}}#InstanceDetails:instanceId={{instance.id}}"
+                        target="_blank">{{instance.id}}</a></td>
                 <td>{{instance.name}}</td>
                 <td
                     style="flex-wrap: nowrap;text-wrap: nowrap">{{instance.region}}</td>
