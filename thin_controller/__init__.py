@@ -37,6 +37,11 @@ def read_simple_css() -> FileResponse:
     )
 
 
+@app.get("/img/favicon.png")
+def read_favicon() -> FileResponse:
+    return FileResponse(os.path.join(os.path.dirname(__file__), "static/favicon.png"))
+
+
 MANAGED_INSTANCE_TAG_FILTER = [
     {"Name": "tag:thin_controller_managed", "Values": ["true"]}
 ]
