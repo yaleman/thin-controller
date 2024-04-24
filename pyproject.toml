@@ -22,7 +22,7 @@ python-multipart = "^0.0.9"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.1"
-mypy = "^1.9.0"
+mypy = "^1.10.0"
 pytest = "^8.1.1"
 types-boto3 = "^1.0.2"
 
