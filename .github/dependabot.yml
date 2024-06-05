@@ -6,4 +6,9 @@ updates:
     interval: daily
     time: "06:00"
     timezone: Australia/Brisbane
+  groups:
+    production-dependencies:
+      dependency-type: "production"
+    development-dependencies:
+      dependency-type: "development"
   open-pull-requests-limit: 99
