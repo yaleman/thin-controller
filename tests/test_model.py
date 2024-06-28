@@ -152,7 +152,7 @@ def test_parse_describe() -> None:
 
     instances = []
     for reservation in TEST_INPUT.get("Reservations", []):
-        for instance in reservation.get("Instances", []):  # type: ignore
+        for instance in reservation.get("Instances", []):
             parsed = AWSInstance.model_validate(instance)
             instances.append(parsed)
 
