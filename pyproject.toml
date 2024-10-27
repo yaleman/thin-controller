@@ -14,7 +14,7 @@ boto3 = "^1.35.44"
 pydantic-settings = "^2.6.0"
 uvicorn = "^0.32.0"
 loguru = "^0.7.2"
-python-multipart = "^0.0.13"
+python-multipart = "^0.0.16"
 
 
 [tool.poetry.scripts]
