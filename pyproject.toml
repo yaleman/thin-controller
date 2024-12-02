@@ -24,7 +24,7 @@ thin-controller = "thin_controller.__main__:cli"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.1"
 mypy = "^1.13.0"
-pytest = "^8.3.3"
+pytest = "^8.3.4"
 types-boto3 = "^1.0.2"
 
 [tool.pylint.MASTER]
