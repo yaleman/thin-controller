@@ -2,7 +2,9 @@
 name = "thin-controller"
 version = "0.0.1"
 description = "Control your EC2 instances with a FastAPI instance in Lambda"
-authors = ["James Hogkinson <james@terminaloutcomes.com>"]
+authors = [
+    "James Hogkinson <james@terminaloutcomes.com>",
+]
 license = "MIT"
 
 [tool.poetry.dependencies]
@@ -16,9 +18,8 @@ uvicorn = "^0.32.1"
 loguru = "^0.7.2"
 python-multipart = "^0.0.19"
 
-
 [tool.poetry.scripts]
-"thin-controller" = "thin_controller.__main__:cli"
+thin-controller = "thin_controller.__main__:cli"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.0"
@@ -26,17 +27,25 @@ mypy = "^1.13.0"
 pytest = "^8.3.3"
 types-boto3 = "^1.0.2"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.pylint.MASTER]
 max-line-length = 200
 
-# https://github.com/samuelcolvin/pydantic/issues/1961#issuecomment-759522422
-#extension-pkg-whitelist=pydantic
-#load-plugins=pylint_pydantic
-
-
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = [
+    "tests",
+]
+
+[build-system]
+requires = [
+    "poetry-core>=1.0.0",
+]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "thin-controller"
+description = "Control your EC2 instances with a FastAPI instance in Lambda"
+license = "MIT"
+version = "0.0.1"
+authors = [
+    { name = "James Hogkinson", email = "james@terminaloutcomes.com" },
+]
