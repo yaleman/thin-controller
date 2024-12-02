@@ -35,6 +35,9 @@ testpaths = [
     "tests",
 ]
 
+[tool.mypy]
+plugins = "pydantic.mypy"
+
 [build-system]
 requires = [
     "poetry-core>=1.0.0",
