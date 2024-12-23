@@ -23,7 +23,7 @@ thin-controller = "thin_controller.__main__:cli"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.3"
-mypy = "^1.13.0"
+mypy = "^1.14.0"
 pytest = "^8.3.4"
 types-boto3 = "^1.35.85"
 
