@@ -16,7 +16,7 @@ boto3 = "^1.35.86"
 pydantic-settings = "^2.7.0"
 uvicorn = "^0.34.0"
 loguru = "^0.7.3"
-python-multipart = "^0.0.19"
+python-multipart = "^0.0.20"
 
 [tool.poetry.scripts]
 thin-controller = "thin_controller.__main__:cli"
