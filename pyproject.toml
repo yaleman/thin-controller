@@ -25,7 +25,7 @@ thin-controller = "thin_controller.__main__:cli"
 ruff = "^0.8.4"
 mypy = "^1.14.0"
 pytest = "^8.3.4"
-types-boto3 = "^1.35.85"
+types-boto3 = "^1.35.88"
 
 [tool.pylint.MASTER]
 max-line-length = 200
