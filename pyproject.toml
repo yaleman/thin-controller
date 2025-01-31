@@ -22,7 +22,7 @@ python-multipart = "^0.0.20"
 thin-controller = "thin_controller.__main__:cli"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.9.3"
+ruff = "^0.9.4"
 mypy = "^1.14.1"
 pytest = "^8.3.4"
 types-boto3 = "^1.36.5"
