@@ -16,12 +16,12 @@ Usage instructions go here.
 
 ## Development
 
-To contribute to this library, first checkout the code. Then create a new virtual environment using `poetry`:
+To contribute to this library, first checkout the code. Then create a new virtual environment using `uv`:
 
 ```shell
 cd thin-controller
-poetry install
-poetry shell
+uv venv
+uv run thin-controller
 ```
 
 ## Using the Terraform/TF Module

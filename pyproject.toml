@@ -1,54 +1,51 @@
-[tool.poetry]
+[project]
 name = "thin-controller"
-version = "0.0.1"
 description = "Control your EC2 instances with a FastAPI instance in Lambda"
-authors = [
-    "James Hogkinson <james@terminaloutcomes.com>",
+license = { text = "MIT" }
+version = "0.0.2"
+authors = [{ name = "James Hogkinson", email = "james@terminaloutcomes.com" }]
+requires-python = "<4.0,>=3.12"
+dependencies = [
+    "fastapi>=0.115.12",
+    "pydantic>=2.11.3",
+    "mangum>=0.19.0",
+    "boto3>=1.37.36",
+    "pydantic-settings>=2.9.0",
+    "uvicorn>=0.34.1",
+    "loguru>=0.7.3",
+    "python-multipart>=0.0.20",
 ]
-license = "MIT"
 
-[tool.poetry.dependencies]
-python = "^3.12"
-fastapi = "^0.115.12"
-pydantic = "^2.11.3"
-mangum = "^0.19.0"
-boto3 = "^1.37.36"
-pydantic-settings = "^2.9.0"
-uvicorn = "^0.34.1"
-loguru = "^0.7.3"
-python-multipart = "^0.0.20"
 
-[tool.poetry.scripts]
+[dependency-groups]
+dev = [
+    "ruff>=0.11.6,<1.0.0",
+    "mypy>=1.15.0,<2.0.0",
+    "pytest>=8.3.5,<9.0.0",
+    "types-boto3>=1.37.36,<2.0.0",
+    "pyright>=1.1.400",
+]
+
+
+[project.scripts]
 thin-controller = "thin_controller.__main__:cli"
 
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.11.6"
-mypy = "^1.15.0"
-pytest = "^8.3.5"
-types-boto3 = "^1.37.36"
 
 [tool.pylint.MASTER]
 max-line-length = 200
 
 [tool.pytest.ini_options]
-testpaths = [
-    "tests",
-]
+testpaths = ["tests"]
 
 [tool.mypy]
 plugins = "pydantic.mypy"
 
 [build-system]
-requires = [
-    "poetry-core>=1.0.0",
-]
-build-backend = "poetry.core.masonry.api"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
 
-[project]
-name = "thin-controller"
-description = "Control your EC2 instances with a FastAPI instance in Lambda"
-license = "MIT"
-version = "0.0.1"
-authors = [
-    { name = "James Hogkinson", email = "james@terminaloutcomes.com" },
-]
+[tool.pyright]
+exclude = ["terraform", ".venv"]
+
+[tool.coverage.run]
+omit = ["tests/*", "terraform/*"]
