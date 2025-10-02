@@ -16,4 +16,4 @@ WORKDIR /home/nonroot
 
 EXPOSE 8000
 
-ENTRYPOINT ["/home/nonroot/.local/bin/thin-controller"]
+ENTRYPOINT ["/home/nonroot/.local/bin/thin-controller", "--host", "0.0.0.0"]

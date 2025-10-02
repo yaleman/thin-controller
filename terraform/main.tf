@@ -31,17 +31,15 @@ resource "aws_lambda_layer_version" "thin_controller" {
 # lambda
 module "thin_controller_module" {
   count  = var.use_lambda ? 1 : 0
-  source = "git::https://github.com/yaleman/terraform_lambda?ref=1.0.8"
+  source = "git::https://github.com/yaleman/terraform_lambda?ref=1.0.9"
 
   function_name  = "thin_controller"
   lambda_handler = "handler.handler"
   lambda_runtime = "python3.12"
 
-  aws_region     = var.aws_region
-  aws_profile    = var.aws_profile
   lambda_timeout = 30
   layer_arns = [
-    aws_lambda_layer_version.thin_controller.arn
+    aws_lambda_layer_version.thin_controller[0].arn
   ]
   lambda_script_filename = "../thin_controller/handler.py"
 

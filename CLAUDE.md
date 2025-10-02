@@ -70,7 +70,7 @@ docker build -t ghcr.io/yaleman/thin-controller:latest .
 
 The Terraform module creates:
 - Lambda layer with dependencies (built using `pip install` into `thin_controller_layer/`)
-- Lambda function using the `terraform_lambda` module (v1.0.8)
+- Lambda function using the `terraform_lambda` module (v1.0.9)
 - Python 3.12 runtime with 30-second timeout
 
 The layer building process uses `python3.13` locally but targets `python3.12` runtime in Lambda.
