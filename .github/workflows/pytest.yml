@@ -12,14 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.13"
       - name: Running pytest
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
-          python --version
           python -m pip install --quiet --no-cache-dir --upgrade uv
           uv run pytest
+          uv run coverage run --source=thin_controller -m pytest
+          uv run coveralls
