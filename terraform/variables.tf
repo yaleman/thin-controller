@@ -14,13 +14,25 @@ variable "public_hostname" {
   type        = string
 }
 
-variable cloudfront_geo_regions {
+variable "use_lambda" {
+  description = "Whether to use Lambda for hosting"
+  type        = bool
+  default     = false
+}
+
+variable "use_fargate" {
+  description = "Whether to use Fargate for hosting"
+  type        = bool
+  default     = false
+}
+
+variable "cloudfront_geo_regions" {
   description = "Cloudfront geo whitelist regions, allowing source IPs"
   type        = list(string)
   default     = ["US", "AU"]
 }
 
-variable thin_controller_regions {
+variable "thin_controller_regions" {
   description = "Comma-delimited list of regions to check/control"
   type        = string
   default     = ""
