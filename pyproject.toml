@@ -29,6 +29,7 @@ dev = [
     "pyright>=1.1.400",
     "coverage>=7.10.7",
     "coveralls>=4.0.1",
+    "pytest-cov>=7.0.0",
 ]
 
 
