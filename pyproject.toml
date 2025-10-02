@@ -30,6 +30,7 @@ dev = [
     "coverage>=7.10.7",
     "coveralls>=4.0.1",
     "pytest-cov>=7.0.0",
+    "httpx>=0.28.1",
 ]
 
 
