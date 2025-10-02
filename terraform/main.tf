@@ -7,7 +7,7 @@ resource "terraform_data" "thin_controller_layer" {
   triggers_replace = data.archive_file.thin_controller_layer
 
   provisioner "local-exec" {
-    command = "python3.12 -m pip install --upgrade -t ./thin_controller_layer/ ../"
+    command = "python3.13 -m pip install --upgrade -t ./thin_controller_layer/ ../"
   }
 
 }
@@ -22,7 +22,7 @@ resource "aws_lambda_layer_version" "thin_controller" {
   layer_name = "thin_controller"
 
   compatible_runtimes = [
-    "python3.12"
+    "python3.13"
   ]
 }
 
@@ -32,7 +32,7 @@ module "thin_controller_module" {
 
   function_name  = "thin_controller"
   lambda_handler = "handler.handler"
-  lambda_runtime = "python3.12"
+  lambda_runtime = "python3.13"
 
   aws_region     = var.aws_region
   aws_profile    = var.aws_profile

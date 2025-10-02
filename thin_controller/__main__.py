@@ -1,12 +1,13 @@
-""" thin-controller main """
+"""thin-controller main"""
 
 import click
+import uvicorn
 
 
 @click.command()
 @click.option("--reload", is_flag=True, help="Enable auto-reload")
-def cli(reload: bool) -> None:
-    import uvicorn
+def cli(reload: bool = False) -> None:
+    """Run the Thin Controller server"""
 
     if reload:
         uvicorn.run(

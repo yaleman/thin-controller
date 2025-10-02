@@ -24,3 +24,4 @@ terraform/local.tf
 terraform/.terraform/
 terraform/thin_controller_layer/
 terraform/*.zip
+.coverage
