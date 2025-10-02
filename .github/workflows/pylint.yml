@@ -13,12 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: "3.13"
       - name: Running tests
         run: |
-            python -m pip install --quiet --no-cache-dir --upgrade uv
-            uv run ruff check $(basename $(pwd) | sed -E 's/-/_/g') tests/
+          python -m pip install --quiet --no-cache-dir --upgrade uv
+          uv run ruff check $(basename $(pwd) | sed -E 's/-/_/g') tests/

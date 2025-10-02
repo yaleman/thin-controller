@@ -1,3 +1,5 @@
+"""test model parsing"""
+
 from thin_controller.models import AWSInstance
 
 
@@ -149,7 +151,7 @@ TEST_INPUT = {
 
 
 def test_parse_describe() -> None:
-
+    """test parsing of the describe output"""
     instances = []
     for reservation in TEST_INPUT.get("Reservations", []):
         for instance in reservation.get("Instances", []):
@@ -157,6 +159,6 @@ def test_parse_describe() -> None:
             instances.append(parsed)
 
     assert len(instances) == 1
-    assert instances[0].id == "i-0b12345042be12345"
+    assert instances[0].instance_id == "i-0b12345042be12345"
     assert instances[0].state == "stopped"
     assert instances[0].region == "us-east-1"

@@ -20,14 +20,14 @@
         <link rel="stylesheet" href="/css/styles.css">
         <link rel="favicon" href="/img/favicon.png">
     </head>
-
     <body>
         <header>
             <h3>Thin Controller</h3>
         </header>
         <main class="main">
-            <div id="errors" class="error"></div>
             <div hx-ext="client-side-templates">
+                <div id="errors" class="error"></div>
+
                 <div hx-get="/api/instances" hx-trigger="load"
                     hx-swap="innerHTML"
                     hx-target="#content"
@@ -47,12 +47,26 @@
                         <tbody id="content">
                             <tr><td colspan='6'>Loading...</td></tr></tbody>
                     </table>
+                </footer>
+            </div>
+        </main>
+        <footer>
+            <div hx-ext="client-side-templates">
+                <div hx-get="/api/config" hx-trigger="load"
+                    hx-swap="innerHTML" hx-target="#api_config"
+                    nunjucks-template="api_config_template">
+                    <a href="https://github.com/yaleman/thin-controller">Thin
+                        Controller</a> |
+                    <div id="api_config" style="display: inline">Config
+                        loading...</div>
                 </div>
-            </main>
-            <footer><a
-                    href="https://github.com/yaleman/thin-controller">Thin
-                    Controller</a></footer>
+            </div>
+
         </body>
+
+        <template id="api_config_template">
+            Regions: {{ regions }}
+        </template>
 
         <template id="instances">
             {% for instance in instances %}
@@ -61,8 +75,8 @@
                 <td
                     style="flex-wrap: nowrap;text-wrap: nowrap">
                     <a
-                        href="https://{{instance.region}}.console.aws.amazon.com/ec2/home?region={{instance.region}}#InstanceDetails:instanceId={{instance.id}}"
-                        target="_blank">{{instance.id}}</a></td>
+                        href="https://{{instance.region}}.console.aws.amazon.com/ec2/home?region={{instance.region}}#InstanceDetails:instanceId={{instance.instance_id}}"
+                        target="_blank">{{instance.instance_id}}</a></td>
                 <td>{{instance.name}}</td>
                 <td
                     style="flex-wrap: nowrap;text-wrap: nowrap">{{instance.region}}</td>
@@ -78,13 +92,13 @@
                 <td>
                     <form method="POST" action="/api/instance">
 
-                        <input type="hidden" name="id"
-                            value="{{instance.id}}" />
+                        <input type="hidden" name="instance_id"
+                            value="{{instance.instance_id}}" />
                         <input type="hidden" name="region"
                             value="{{instance.region}}" />
                         {% if instance.state=="stopped" %}
                         <input type='submit' name='new_state' value="start"
-                            id="{{instance.id}}" />
+                            id="{{instance.instance_id}}" />
                         {% elif instance.state=="starting" %}
                         <input type='submit' name='starting'
                             disabled>Starting...</input>
@@ -92,6 +106,8 @@
 
                     <input type='submit' name="new_state" value='stop'
                         style="background-color: green" />
+                    {% else %}
+                    <button disabled>{{instance.state}}</button>
                     {%endif%}
 
                 </form>
