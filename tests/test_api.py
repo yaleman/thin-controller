@@ -31,7 +31,7 @@ def test_up(client: TestClient) -> None:
 
     response = client.get("/up")
     assert response.status_code == 200
-    assert response.content.decode() == "OK"
+    assert response.content.decode() == '"OK"'
 
 
 def test_css(client: TestClient) -> None:
