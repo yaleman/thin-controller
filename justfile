@@ -16,3 +16,7 @@ lint:
 
 types:
     uv run mypy --strict thin_controller tests
+
+
+build_container:
+    docker build -t ghcr.io/yaleman/thin-controller:latest .

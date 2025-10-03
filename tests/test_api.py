@@ -26,6 +26,14 @@ def test_index(client: TestClient) -> None:
     assert "Thin Controller" in response.content.decode()
 
 
+def test_up(client: TestClient) -> None:
+    """Test the /up endpoint."""
+
+    response = client.get("/up")
+    assert response.status_code == 200
+    assert response.content.decode() == '"OK"'
+
+
 def test_css(client: TestClient) -> None:
     """Test the main endpoint."""
 

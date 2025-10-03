@@ -2,25 +2,25 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.opentofu.org/hashicorp/archive" {
-  version = "2.4.2"
+  version = "2.7.1"
   hashes = [
-    "h1:tZcueUOGqjDRRzW9b6BMwV++XRqABodQjgC/K3bRoXM=",
-    "zh:0fee4f61bc999b5174a1268295e04c91c3f6be0160022cb53943b6ec0a3f1055",
-    "zh:10a895ee751beec68727d3dc6bf8e670f499618bb4b02649544be2c73e89603e",
-    "zh:1118373dfc03cf524273573e3aff9c99e0bb7128ab3ce0be211fd30e3928dfb8",
-    "zh:19c1b4c785f1d864e4fcaec7d96045437494efc333f1e661ea9994cd5c969cdb",
-    "zh:23f0aa399394ce8aa918a6a16ca9f5451d9d5b021e1b08929eb7972f65cb27da",
-    "zh:27d5daeec1819019a4b94c4980c09626e9cf71de3f54128a621fddb1b94b9ece",
-    "zh:56244088a96ff9e3a04b23de0ce2fcfa92c1a5fe6c91c6357cceda4d6d441c17",
-    "zh:578fcb23e8ebde3c5be6c5c67377b5e0c404cc807a74d7087e70c8fb3bb59b92",
-    "zh:9709d108559da5066f24a6d28be661b65a02e908f89b91fe42fc493962a5f466",
-    "zh:ff2a6df5d22bda78ca284756801ba7c86504e4bf0b48b31c8f5af44eefd9d0e8",
+    "h1:/Y6fLmEGMtbcAFi3ALu5tAwEIfUc8vGZRErNjMIfi2U=",
+    "zh:4f8fe5f92125fc7be91379dbde004aaf676fbb523082af167d0a57ac723836bc",
+    "zh:4fba9a08c254fd3c17464c1e13398e4927b1d3e22bfdc3bb66c4e5bd9573ada4",
+    "zh:65e9945c1e89333b01ef25c15518e125817268f9ecddc3f9d5337dc120d342ee",
+    "zh:6cc92ec02475310612a2fc663ab22366c17005203be55287e9af316ac0397ef4",
+    "zh:7e9efa56a27ea28c7a19465b4223f43653988639123160b09507cbc7a9ad5458",
+    "zh:9c77863b5ff47196cec4e82ce9b943c8a0de5840f7b1f82c7e96d92d8be7c7c1",
+    "zh:b6498ff9e2e717c94e5d2c494a2071acc123e8195bfdd9f7965a0676fa866b06",
+    "zh:c5941326ffe88ff77d15fb1212f746ea57eebf7556bc2707c3a054ad0e5a6ab0",
+    "zh:ec1c14feeeb3b78be2ab37533c6ef2e0d6417c6faa82ddd62c446db77f618926",
+    "zh:ed4643c4f8d9f7d060c01463317d68315b6af7197beaba331451ca3991a9c990",
   ]
 }
 
 provider "registry.opentofu.org/hashicorp/aws" {
   version     = "5.46.0"
-  constraints = "~> 5.0"
+  constraints = "~> 5.10, 5.46.0"
   hashes = [
     "h1:/vOvEEgnd+OY/Bbz6uwwEW1EnlgWQWJsXw5NnwHQOUY=",
     "zh:151d35ab9d67f39ab568f5713dd74f0856a7d7b59a8c9557d05eaf0fa305426f",
