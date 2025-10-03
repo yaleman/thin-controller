@@ -31,9 +31,3 @@ jobs:
         run: |
           uv run coveralls
         continue-on-error: true
-
-      - name: Coverage comment
-        id: coverage_comment
-        uses: py-cov-action/python-coverage-comment-action@v3
-        with:
-          GITHUB_TOKEN: ${{ github.token }}
