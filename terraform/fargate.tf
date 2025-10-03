@@ -182,6 +182,12 @@ resource "aws_security_group" "ecs_tasks" {
   )
 }
 
+# Data source to get CloudFront managed prefix list
+data "aws_ec2_managed_prefix_list" "cloudfront" {
+  count = var.use_fargate ? 1 : 0
+  name  = "com.amazonaws.global.cloudfront.origin-facing"
+}
+
 # Security Group for ALB
 resource "aws_security_group" "alb" {
   count       = var.use_fargate ? 1 : 0
@@ -190,21 +196,11 @@ resource "aws_security_group" "alb" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description     = "HTTP from allowed IPs"
+    description     = "HTTP from CloudFront"
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
-    cidr_blocks     = var.ip_allow_list_inbound
-    prefix_list_ids = var.managed_prefix_list_ids_allow_inbound
-  }
-
-  ingress {
-    description     = "HTTPS from allowed IPs"
-    from_port       = 443
-    to_port         = 443
-    protocol        = "tcp"
-    cidr_blocks     = var.ip_allow_list_inbound
-    prefix_list_ids = var.managed_prefix_list_ids_allow_inbound
+    prefix_list_ids = [data.aws_ec2_managed_prefix_list.cloudfront[0].id]
   }
 
   egress {
