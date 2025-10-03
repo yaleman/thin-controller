@@ -182,12 +182,6 @@ resource "aws_security_group" "ecs_tasks" {
   )
 }
 
-# Data source to get CloudFront managed prefix list
-data "aws_ec2_managed_prefix_list" "cloudfront" {
-  count = var.use_fargate ? 1 : 0
-  name  = "com.amazonaws.global.cloudfront.origin-facing"
-}
-
 # Security Group for ALB
 resource "aws_security_group" "alb" {
   count       = var.use_fargate ? 1 : 0
@@ -196,11 +190,21 @@ resource "aws_security_group" "alb" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description     = "HTTP from CloudFront"
+    description     = "HTTP from allowed IPs"
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
-    prefix_list_ids = [data.aws_ec2_managed_prefix_list.cloudfront[0].id]
+    cidr_blocks     = var.ip_allow_list_inbound
+    prefix_list_ids = var.managed_prefix_list_ids_allow_inbound
+  }
+
+  ingress {
+    description     = "HTTPS from allowed IPs"
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    cidr_blocks     = var.ip_allow_list_inbound
+    prefix_list_ids = var.managed_prefix_list_ids_allow_inbound
   }
 
   egress {
@@ -322,5 +326,5 @@ output "alb_dns_name" {
 
 output "connection_info" {
   description = "How to connect to the application"
-  value       = var.use_fargate ? "Use CloudFront URL (see cloudfront_url output)" : null
+  value       = var.use_fargate ? "Use ALB URL: http://${aws_lb.thin_controller_alb[0].dns_name}" : null
 }
