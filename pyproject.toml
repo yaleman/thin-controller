@@ -58,3 +58,4 @@ omit = [
     "terraform/*",                # no python here
     "thin_controller/handler.py", # only a stub for the Lambda handler
 ]
+relative_files = true
