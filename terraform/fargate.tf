@@ -72,11 +72,22 @@ resource "aws_iam_role_policy" "ecs_task_ec2_policy" {
       {
         Effect = "Allow"
         Action = [
-          "ec2:DescribeInstances",
+          "ec2:DescribeInstances"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "ec2:StartInstances",
           "ec2:StopInstances"
         ]
         Resource = "*"
+        Condition = {
+          StringEquals = {
+            "ec2:ResourceTag/thin_controller_managed" = "true"
+          }
+        }
       }
     ]
   })
