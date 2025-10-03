@@ -12,19 +12,15 @@ vpc_id             = "vpc-xxxxxxxx"
 public_subnet_ids  = ["subnet-xxxxxxxx", "subnet-yyyyyyyy"]  # For NLB
 private_subnet_ids = ["subnet-aaaaaaaa", "subnet-bbbbbbbb"]  # For ECS tasks
 
-# Security - IP allow list for inbound traffic (optional, not used with NLB)
-# NLB doesn't support security groups, so IP filtering must be done at task level
+# Security - IP allow list for inbound traffic
 ip_allow_list_inbound = []
 
-# Security - Managed prefix lists for inbound traffic (optional, not used with NLB)
+# Security - Managed prefix lists for inbound traffic (e.g., "pl-xxxxxxxxx")
 managed_prefix_list_ids_allow_inbound = []
 
 # Application Configuration
 thin_controller_regions = "us-east-1,us-west-2"
 public_hostname         = "thin-controller.example.com"
-
-# CloudFront Configuration (if using CloudFront)
-cloudfront_geo_regions = ["US", "AU"]
 
 # Common tags applied to all resources
 tags = {

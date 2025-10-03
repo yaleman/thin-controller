@@ -41,6 +41,6 @@ resource "aws_iam_policy" "lambda_ec2_policy" {
 # Attach the policy to the Lambda function role
 resource "aws_iam_role_policy_attachment" "lambda_ec2_policy_attachment" {
   count      = var.use_lambda ? 1 : 0
-  role       = module.thin_controller_module[0].lambda_role_name
+  role       = module.thin_controller_module[0].role_name
   policy_arn = aws_iam_policy.lambda_ec2_policy[0].arn
 }

@@ -326,5 +326,5 @@ output "alb_dns_name" {
 
 output "connection_info" {
   description = "How to connect to the application"
-  value       = var.use_fargate ? "Use CloudFront URL (see cloudfront_url output)" : null
+  value       = var.use_fargate ? "Use ALB URL: http://${aws_lb.thin_controller_alb[0].dns_name}" : null
 }

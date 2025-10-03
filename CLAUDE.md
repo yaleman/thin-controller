@@ -19,6 +19,7 @@ thin-controller is a FastAPI-based web application that controls AWS EC2 instanc
 ## Development Commands
 
 ### Running the Application
+
 ```bash
 # Start development server with auto-reload
 uv run thin-controller --reload
@@ -28,6 +29,7 @@ uv run thin-controller
 ```
 
 ### Testing and Quality Checks
+
 ```bash
 # Run all checks (lint + types + test)
 just check
@@ -52,6 +54,7 @@ just coverage
 ```
 
 ### Container
+
 ```bash
 # Build Docker container
 just build_container
@@ -69,6 +72,7 @@ docker build -t ghcr.io/yaleman/thin-controller:latest .
 ## AWS Lambda Deployment
 
 The Terraform module creates:
+
 - Lambda layer with dependencies (built using `pip install` into `thin_controller_layer/`)
 - Lambda function using the `terraform_lambda` module (v1.0.9)
 - Python 3.12 runtime with 30-second timeout
@@ -78,6 +82,7 @@ The layer building process uses `python3.13` locally but targets `python3.12` ru
 ## State Management
 
 Instance state changes follow strict rules in `STATE_CHANGES`:
+
 - `running` → can only `stop`
 - `stopped` → can only `start`
 - Other states (`pending`, `shutting-down`, `terminated`, `stopping`) are not directly actionable

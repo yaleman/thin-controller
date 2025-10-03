@@ -9,6 +9,10 @@ name: pytest
 
 jobs:
   pytest:
+    permissions:
+      # Gives the action the necessary permissions for publishing new
+      # comments in pull requests.
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -23,4 +27,13 @@ jobs:
           python -m pip install --quiet --no-cache-dir --upgrade uv
           uv run pytest
           uv run coverage run --source=thin_controller -m pytest
+      - name: Upload coverage to Coveralls
+        run: |
           uv run coveralls
+        continue-on-error: true
+
+      - name: Coverage comment
+        id: coverage_comment
+        uses: py-cov-action/python-coverage-comment-action@v3
+        with:
+          GITHUB_TOKEN: ${{ github.token }}
