@@ -5,8 +5,8 @@ resource "aws_cloudfront_distribution" "thin_controller" {
   comment = "Thin Controller CloudFront distribution"
 
   origin {
-    domain_name = aws_lb.thin_controller_nlb[0].dns_name
-    origin_id   = "nlb-origin"
+    domain_name = aws_lb.thin_controller_alb[0].dns_name
+    origin_id   = "alb-origin"
 
     custom_origin_config {
       http_port              = 80
@@ -19,7 +19,7 @@ resource "aws_cloudfront_distribution" "thin_controller" {
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "nlb-origin"
+    target_origin_id = "alb-origin"
 
     forwarded_values {
       query_string = true
@@ -49,9 +49,12 @@ resource "aws_cloudfront_distribution" "thin_controller" {
 
   web_acl_id = aws_wafv2_web_acl.thin_controller[0].arn
 
-  tags = {
-    Name = "thin-controller"
-  }
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "thin-controller"
+    }
+  )
 }
 
 # Output

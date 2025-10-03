@@ -7,6 +7,13 @@ resource "aws_ecs_cluster" "thin_controller" {
     name  = "containerInsights"
     value = "enabled"
   }
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "thin-controller"
+    }
+  )
 }
 
 # IAM Role for ECS Task Execution
@@ -80,6 +87,13 @@ resource "aws_cloudwatch_log_group" "thin_controller" {
   count             = var.use_fargate ? 1 : 0
   name              = "/ecs/thin-controller"
   retention_in_days = 7
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "thin-controller-logs"
+    }
+  )
 }
 
 # ECS Task Definition
@@ -134,11 +148,11 @@ resource "aws_security_group" "ecs_tasks" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description     = "HTTP from NLB"
+    description     = "HTTP from ALB"
     from_port       = 8000
     to_port         = 8000
     protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.alb[0].id]
   }
 
   egress {
@@ -149,30 +163,78 @@ resource "aws_security_group" "ecs_tasks" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Name = "thin-controller-ecs-tasks"
-  }
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "thin-controller-ecs-tasks"
+    }
+  )
 }
 
-# Network Load Balancer
-resource "aws_lb" "thin_controller_nlb" {
+# Security Group for ALB
+resource "aws_security_group" "alb" {
+  count       = var.use_fargate ? 1 : 0
+  name        = "thin-controller-alb"
+  description = "Security group for thin-controller ALB"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description     = "HTTP from allowed IPs"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    cidr_blocks     = var.ip_allow_list_inbound
+    prefix_list_ids = var.managed_prefix_list_ids_allow_inbound
+  }
+
+  ingress {
+    description     = "HTTPS from allowed IPs"
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    cidr_blocks     = var.ip_allow_list_inbound
+    prefix_list_ids = var.managed_prefix_list_ids_allow_inbound
+  }
+
+  egress {
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "thin-controller-alb"
+    }
+  )
+}
+
+# Application Load Balancer
+resource "aws_lb" "thin_controller_alb" {
   count              = var.use_fargate ? 1 : 0
-  name               = "thin-controller-nlb"
+  name               = "thin-controller-alb"
   internal           = false
-  load_balancer_type = "network"
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb[0].id]
   subnets            = var.public_subnet_ids
 
-  tags = {
-    Name = "thin-controller-nlb"
-  }
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "thin-controller-alb"
+    }
+  )
 }
 
-# Target Group (NLB)
-resource "aws_lb_target_group" "thin_controller_nlb" {
+# Target Group (ALB)
+resource "aws_lb_target_group" "thin_controller_alb" {
   count       = var.use_fargate ? 1 : 0
-  name        = "thin-controller-nlb"
+  name        = "thin-controller-alb"
   port        = 8000
-  protocol    = "TCP"
+  protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
 
@@ -180,26 +242,32 @@ resource "aws_lb_target_group" "thin_controller_nlb" {
     enabled             = true
     healthy_threshold   = 2
     interval            = 30
+    matcher             = "200"
+    path                = "/"
     port                = "traffic-port"
-    protocol            = "TCP"
+    protocol            = "HTTP"
+    timeout             = 5
     unhealthy_threshold = 3
   }
 
-  tags = {
-    Name = "thin-controller-nlb"
-  }
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "thin-controller-alb"
+    }
+  )
 }
 
-# NLB Listener
-resource "aws_lb_listener" "thin_controller_nlb" {
+# ALB Listener
+resource "aws_lb_listener" "thin_controller_alb" {
   count             = var.use_fargate ? 1 : 0
-  load_balancer_arn = aws_lb.thin_controller_nlb[0].arn
+  load_balancer_arn = aws_lb.thin_controller_alb[0].arn
   port              = "80"
-  protocol          = "TCP"
+  protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.thin_controller_nlb[0].arn
+    target_group_arn = aws_lb_target_group.thin_controller_alb[0].arn
   }
 }
 
@@ -219,7 +287,7 @@ resource "aws_ecs_service" "thin_controller" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.thin_controller_nlb[0].arn
+    target_group_arn = aws_lb_target_group.thin_controller_alb[0].arn
     container_name   = "thin-controller"
     container_port   = 8000
   }
@@ -240,9 +308,9 @@ output "ecs_service_name" {
   value       = var.use_fargate ? aws_ecs_service.thin_controller[0].name : null
 }
 
-output "nlb_dns_name" {
-  description = "DNS name of the Network Load Balancer"
-  value       = var.use_fargate ? aws_lb.thin_controller_nlb[0].dns_name : null
+output "alb_dns_name" {
+  description = "DNS name of the Application Load Balancer"
+  value       = var.use_fargate ? aws_lb.thin_controller_alb[0].dns_name : null
 }
 
 output "connection_info" {

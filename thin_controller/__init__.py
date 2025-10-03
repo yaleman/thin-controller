@@ -202,3 +202,9 @@ def read_config() -> ApiConfig:
     val = config.model_dump(mode="json")
     val["regions"] = config.region_list()
     return ApiConfig.model_validate(val)
+
+
+@app.get("/up")
+def up() -> str:
+    """simple "up" check"""
+    return "OK"

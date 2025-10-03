@@ -37,9 +37,12 @@ resource "aws_wafv2_web_acl" "thin_controller" {
     sampled_requests_enabled   = true
   }
 
-  tags = {
-    Name = "thin-controller-waf"
-  }
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "thin-controller-waf"
+    }
+  )
 }
 
 # Output

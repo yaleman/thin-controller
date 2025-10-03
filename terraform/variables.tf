@@ -67,3 +67,9 @@ variable "managed_prefix_list_ids_allow_inbound" {
   type        = list(string)
   default     = []
 }
+
+variable "tags" {
+  description = "Common tags to apply to all resources"
+  type        = map(string)
+  default     = {}
+}

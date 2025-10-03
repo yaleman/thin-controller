@@ -25,3 +25,10 @@ public_hostname         = "thin-controller.example.com"
 
 # CloudFront Configuration (if using CloudFront)
 cloudfront_geo_regions = ["US", "AU"]
+
+# Common tags applied to all resources
+tags = {
+  Environment = "production"
+  Owner       = "team-name"
+  CostCenter  = "12345"
+}
