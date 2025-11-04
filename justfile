@@ -4,7 +4,7 @@ default:
 check: lint types test
 
 coverage:
-    uv run coverage run --source=thin_controller -m pytest
+    uv run coverage run --source=thin_controller --omit="thin_controller/__main__.py,thin_controller/handler.py" -m pytest
     uv run coveralls
 
 

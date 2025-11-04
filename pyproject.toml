@@ -45,12 +45,13 @@ load-plugins = "pylint_pytest"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+norecursedirs = ["terraform/*", "assets/*"]
 
 [tool.mypy]
 plugins = "pydantic.mypy"
 
 [tool.pyright]
-exclude = ["terraform", ".venv"]
+exclude = ["terraform/*", ".venv"]
 
 [tool.coverage.run]
 omit = [
