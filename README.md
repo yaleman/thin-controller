@@ -6,11 +6,11 @@ It can run locally with uvicorn, behind AWS Lambda via Mangum, or as a container
 
 ## Overview
 
-- FastAPI app: [thin_controller/__init__.py](/Users/yaleman/Projects/thin-controller/thin_controller/__init__.py)
-- Local CLI: [thin_controller/__main__.py](/Users/yaleman/Projects/thin-controller/thin_controller/__main__.py)
-- Lambda handler: [thin_controller/handler.py](/Users/yaleman/Projects/thin-controller/thin_controller/handler.py)
-- Models and config: [thin_controller/models.py](/Users/yaleman/Projects/thin-controller/thin_controller/models.py)
-- Terraform deployment code: [terraform/](/Users/yaleman/Projects/thin-controller/terraform)
+- FastAPI app: [thin_controller/__init__.py](thin_controller/__init__.py)
+- Local CLI: [thin_controller/__main__.py](thin_controller/__main__.py)
+- Lambda handler: [thin_controller/handler.py](thin_controller/handler.py)
+- Models and config: [thin_controller/models.py](thin_controller/models.py)
+- Terraform deployment code: [terraform/](terraform)
 
 ## Requirements
 
@@ -64,6 +64,71 @@ Operational rules:
 - The UI only allows `stopped -> start` and `running -> stop`.
 - Other instance states are visible but not actionable.
 
+## Scheduled power control
+
+The repository can optionally deploy a separate scheduler Lambda that runs from EventBridge every hour and enforces EC2 power state from instance tags. This scheduler is independent of the UI hosting mode, so it can run whether the app itself is deployed on Lambda or Fargate.
+
+Terraform settings:
+
+- `enable_scheduled_power_control`: enable or disable the scheduler module. Default `false`.
+- `scheduled_power_control_expression`: EventBridge schedule expression. Default `rate(1 hour)`.
+
+Required tags for scheduler participation:
+
+- `thin_controller_managed=true`
+- `thin-controller-timezone`: IANA timezone such as `Australia/Brisbane`
+- `thin-controller-on-hours`: daily `HH-HH` 24-hour window such as `09-17` or `22-06`
+
+Optional scheduler override:
+
+- `thin-controller-always-on=true`
+- `thin-controller-always-on=1`
+
+Schedule rules:
+
+- The scheduler starts `stopped` instances when the instance's local time is inside the configured window.
+- The scheduler stops `running` instances when the local time is outside the configured window.
+- Start hour is inclusive and end hour is exclusive.
+- Overnight windows are supported, for example `22-06`.
+- Instances missing either scheduling tag are ignored.
+- Invalid tag values are logged and skipped.
+
+Terraform example:
+
+```hcl
+use_fargate                    = true
+enable_scheduled_power_control = true
+scheduled_power_control_expression = "rate(1 hour)"
+thin_controller_regions        = "ap-southeast-2,us-east-1"
+```
+
+Tag examples:
+
+Business hours in Brisbane:
+
+```text
+thin_controller_managed=true
+thin-controller-timezone=Australia/Brisbane
+thin-controller-on-hours=09-17
+```
+
+Overnight window in New York:
+
+```text
+thin_controller_managed=true
+thin-controller-timezone=America/New_York
+thin-controller-on-hours=22-06
+```
+
+Temporary always-on override:
+
+```text
+thin_controller_managed=true
+thin-controller-timezone=Australia/Brisbane
+thin-controller-on-hours=09-17
+thin-controller-always-on=true
+```
+
 ## HTTP surface
 
 - `GET /`: main HTML UI
@@ -76,11 +141,11 @@ The `POST /api/instance` route expects form fields for `instance_id`, `region`, 
 
 ## Deployment
 
-Infrastructure lives in [terraform/](/Users/yaleman/Projects/thin-controller/terraform). Start with [terraform/terraform.tfvars.example](/Users/yaleman/Projects/thin-controller/terraform/terraform.tfvars.example).
+Infrastructure lives in [terraform/](terraform). Start with [terraform/terraform.tfvars.example](terraform/terraform.tfvars.example).
 
 Terraform supports two deployment modes:
 
-- Lambda, using the Mangum handler in [thin_controller/handler.py](/Users/yaleman/Projects/thin-controller/thin_controller/handler.py)
-- Fargate, using the container built from [Dockerfile](/Users/yaleman/Projects/thin-controller/Dockerfile)
+- Lambda, using the Mangum handler in [thin_controller/handler.py](thin_controller/handler.py)
+- Fargate, using the container built from [Dockerfile](Dockerfile)
 
 The Lambda packaging flow currently installs dependencies with local `python3.13` in Terraform while targeting the AWS Lambda `python3.12` runtime.

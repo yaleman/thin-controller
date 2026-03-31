@@ -32,6 +32,18 @@ variable "thin_controller_regions" {
   default     = ""
 }
 
+variable "enable_scheduled_power_control" {
+  description = "Whether to deploy the hourly scheduled EC2 power controller"
+  type        = bool
+  default     = false
+}
+
+variable "scheduled_power_control_expression" {
+  description = "EventBridge schedule expression for the scheduled EC2 power controller"
+  type        = string
+  default     = "rate(1 hour)"
+}
+
 variable "vpc_id" {
   description = "VPC ID for Fargate deployment"
   type        = string
