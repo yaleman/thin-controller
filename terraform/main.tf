@@ -50,7 +50,7 @@ module "thin_controller_module" {
   ]
   lambda_script_filename = "../thin_controller/handler.py"
 
-  environment_variables = {
+  environment_variables = trimspace(var.thin_controller_regions) == "" ? {} : {
     THIN_CONTROLLER_REGIONS = var.thin_controller_regions
   }
   log_retention_days = 7

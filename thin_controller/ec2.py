@@ -21,14 +21,13 @@ def list_managed_instances(regions: List[str]) -> List[AWSInstance]:
     """List managed instances across all configured regions."""
     instances = []
     for region in regions:
-        region_instances = (
-            Session(region_name=region)
-            .client("ec2")
-            .describe_instances(Filters=MANAGED_INSTANCE_TAG_FILTER)
+        paginator = Session(region_name=region).client("ec2").get_paginator(
+            "describe_instances"
         )
-        for reservation in region_instances.get("Reservations", []):
-            for instance in reservation.get("Instances", []):
-                instances.append(AWSInstance.model_validate(instance))
+        for page in paginator.paginate(Filters=MANAGED_INSTANCE_TAG_FILTER):
+            for reservation in page.get("Reservations", []):
+                for instance in reservation.get("Instances", []):
+                    instances.append(AWSInstance.model_validate(instance))
     return instances
 
 
