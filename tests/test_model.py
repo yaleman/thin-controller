@@ -1,6 +1,7 @@
 """test model parsing"""
 
-from thin_controller.models import AWSInstance
+import boto3
+from thin_controller.models import AWSInstance, Config
 
 
 TEST_INPUT = {
@@ -162,3 +163,17 @@ def test_parse_describe() -> None:
     assert instances[0].instance_id == "i-0b12345042be12345"
     assert instances[0].state == "stopped"
     assert instances[0].region == "us-east-1"
+
+
+def test_region_list_uses_defaults_for_empty_config(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Empty region configuration should fall back to discovered AWS regions."""
+    monkeypatch.setattr(
+        boto3.session.Session,
+        "get_available_regions",
+        lambda self, service_name: ["ap-southeast-2", "us-east-1"],
+    )
+    assert Config(regions="").region_list() == ["ap-southeast-2", "us-east-1"]
+    assert Config(regions="ap-southeast-2, ,us-east-1").region_list() == [
+        "ap-southeast-2",
+        "us-east-1",
+    ]

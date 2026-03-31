@@ -8,11 +8,11 @@ module "scheduler_lambda" {
   lambda_timeout = 30
   layer_arns     = var.lambda_layer_arns
 
-  lambda_script_filename     = abspath("${path.root}/../thin_controller/scheduler_handler.py")
+  lambda_script_filename     = "../thin_controller/scheduler_handler.py"
   lambda_run_on_schedule     = true
   lambda_schedule_expression = var.schedule_expression
 
-  environment_variables = {
+  environment_variables = trimspace(var.thin_controller_regions) == "" ? {} : {
     THIN_CONTROLLER_REGIONS = var.thin_controller_regions
   }
 
