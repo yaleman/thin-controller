@@ -1,10 +1,16 @@
 # generate a layer for the thing
 locals {
   thin_controller_layer_zip = "thin_controller_layer.zip"
+  lambda_layer_required     = var.use_lambda || var.enable_scheduled_power_control
 }
 
 resource "terraform_data" "thin_controller_layer" {
-  triggers_replace = data.archive_file.thin_controller_layer
+  count = local.lambda_layer_required ? 1 : 0
+
+  triggers_replace = {
+    pyproject = filemd5("../pyproject.toml")
+    uv_lock   = filemd5("../uv.lock")
+  }
 
   provisioner "local-exec" {
     command = "python3.13 -m pip install --upgrade -t ./thin_controller_layer/ ../"
@@ -13,13 +19,14 @@ resource "terraform_data" "thin_controller_layer" {
 }
 
 data "archive_file" "thin_controller_layer" {
-  count       = var.use_lambda ? 1 : 0
+  count       = local.lambda_layer_required ? 1 : 0
+  depends_on  = [terraform_data.thin_controller_layer]
   type        = "zip"
   output_path = local.thin_controller_layer_zip
   source_dir  = "./thin_controller_layer"
 }
 resource "aws_lambda_layer_version" "thin_controller" {
-  count      = var.use_lambda ? 1 : 0
+  count      = local.lambda_layer_required ? 1 : 0
   filename   = local.thin_controller_layer_zip
   layer_name = "thin_controller"
 
