@@ -14,7 +14,7 @@ dependencies = [
     "pydantic-settings>=2.9.0",
     "uvicorn>=0.34.1",
     "loguru>=0.7.3",
-    "python-multipart>=0.0.20",
+    "python-multipart>=0.0.26",
 ]
 readme = "README.md"
 
