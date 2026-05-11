@@ -1,5 +1,5 @@
 ---
-name: mypy
+name: Linting
 
 "on":
   push:
@@ -16,8 +16,7 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.13"
-      - name: Running mypy
+      - name: Running linting
         run: |
           python -m pip install --quiet --no-cache-dir --upgrade uv
-          uv run pyright
-          uv run mypy --strict $(basename $(pwd) | sed -E 's/-/_/g') tests/
+          uv run ty check

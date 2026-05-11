@@ -14,7 +14,6 @@ lint:
     uv run ruff check thin_controller tests
 
 types:
-    uv run mypy --strict thin_controller tests
     uv run ty check
 
 build_container:
