@@ -57,4 +57,11 @@ class Config(BaseSettings):
 
     def region_list(self) -> List[str]:
         """get the list of regions"""
-        return [region.strip() for region in self.regions.split(",")]  # pylint: disable=E1101,no-member
+        configured_regions = [
+            region.strip()
+            for region in self.regions.split(",")
+            if region.strip()
+        ]
+        if configured_regions:
+            return configured_regions  # pylint: disable=E1101,no-member
+        return boto3.session.Session().get_available_regions("ec2")

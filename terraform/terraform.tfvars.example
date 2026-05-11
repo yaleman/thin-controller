@@ -6,6 +6,10 @@ aws_region  = "us-east-1"
 use_lambda  = false
 use_fargate = true
 
+# Optional scheduled EC2 power control
+enable_scheduled_power_control = false
+scheduled_power_control_expression = "rate(1 hour)"
+
 # Fargate Configuration (required when use_fargate = true)
 # NLB is always created when use_fargate = true
 vpc_id             = "vpc-xxxxxxxx"
