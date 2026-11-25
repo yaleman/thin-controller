@@ -1,8 +1,8 @@
 """test model parsing"""
 
 import boto3
-from thin_controller.models import AWSInstance, Config
 
+from thin_controller.models import AWSInstance, Config
 
 TEST_INPUT = {
     "Reservations": [

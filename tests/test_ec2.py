@@ -25,8 +25,16 @@ def test_list_managed_instances_reads_all_pages(monkeypatch) -> None:  # type: i
                 {"Name": "tag:thin_controller_managed", "Values": ["true"]}
             ]
             return [
-                {"Reservations": [{"Instances": [build_instance("i-0b12345042be12345")]}]},
-                {"Reservations": [{"Instances": [build_instance("i-0b12345042be12346")]}]},
+                {
+                    "Reservations": [
+                        {"Instances": [build_instance("i-0b12345042be12345")]}
+                    ]
+                },
+                {
+                    "Reservations": [
+                        {"Instances": [build_instance("i-0b12345042be12346")]}
+                    ]
+                },
             ]
 
     class FakeClient:

@@ -1,8 +1,8 @@
 """Schedule parsing and evaluation for managed EC2 instances."""
 
-from dataclasses import dataclass
-from datetime import datetime, timezone
 import re
+from dataclasses import dataclass
+from datetime import UTC, datetime
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from thin_controller.models import AWSInstance
@@ -77,7 +77,7 @@ def decide_schedule_action(
     except ValueError as error:
         return ScheduleDecision(action=None, reason=str(error))
 
-    current_time = now or datetime.now(timezone.utc)
+    current_time = now or datetime.now(UTC)
     local_time = current_time.astimezone(instance_timezone)
     inside_window = is_hour_in_window(local_time.hour, start_hour, end_hour)
 

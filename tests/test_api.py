@@ -3,9 +3,10 @@
 import os
 import sys
 
-from fastapi.testclient import TestClient
 import pytest
+from fastapi.testclient import TestClient
 from loguru import logger
+
 from thin_controller import app
 
 logger.remove()

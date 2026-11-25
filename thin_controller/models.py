@@ -1,11 +1,10 @@
 """Models for parsing things"""
 
-from typing import Dict, List, Optional
-from pydantic import AliasPath, BaseModel, Field, field_validator, model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing_extensions import Self
+from typing import Self
 
 import boto3
+from pydantic import AliasPath, BaseModel, Field, field_validator, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AWSInstance(BaseModel):
@@ -15,23 +14,23 @@ class AWSInstance(BaseModel):
     state: str = Field(..., validation_alias=AliasPath("State", "Name"))
     instance_type: str = Field(..., validation_alias="InstanceType")
 
-    tags: Dict[str, str] = Field(..., validation_alias="Tags")
+    tags: dict[str, str] = Field(..., validation_alias="Tags")
     region: str = Field(..., validation_alias="Placement")
 
-    name: Optional[str] = None
+    name: str | None = None
 
-    cron_start: Optional[str] = None
-    cron_stop: Optional[str] = None
+    cron_start: str | None = None
+    cron_stop: str | None = None
 
     @field_validator("region", mode="before")
     @classmethod
-    def pull_region(cls, v: Dict[str, str]) -> str:
+    def pull_region(cls, v: dict[str, str]) -> str:
         """pull the region from the placement dict"""
         return v["AvailabilityZone"][:-1]
 
     @field_validator("tags", mode="before")
     @classmethod
-    def input_to_output(cls, v: List[Dict[str, str]]) -> Dict[str, str]:
+    def input_to_output(cls, v: list[dict[str, str]]) -> dict[str, str]:
         """convert list of dicts to dict"""
         res = {}
         for element in v:
@@ -55,12 +54,10 @@ class Config(BaseSettings):
     )
     model_config = SettingsConfigDict(env_prefix="THIN_CONTROLLER_")
 
-    def region_list(self) -> List[str]:
+    def region_list(self) -> list[str]:
         """get the list of regions"""
         configured_regions = [
-            region.strip()
-            for region in self.regions.split(",")
-            if region.strip()
+            region.strip() for region in self.regions.split(",") if region.strip()
         ]
         if configured_regions:
             return configured_regions  # pylint: disable=E1101,no-member
