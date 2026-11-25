@@ -2,7 +2,7 @@
 
 import os
 import re
-from typing import Annotated, Dict, List
+from typing import Annotated
 
 from botocore.exceptions import ClientError, NoCredentialsError
 from fastapi import FastAPI, Form, HTTPException
@@ -18,7 +18,6 @@ from thin_controller.ec2 import (
     stop_instance,
 )
 from thin_controller.models import AWSInstance, Config
-
 
 app = FastAPI()
 config = Config()
@@ -107,7 +106,7 @@ def update_instance(
 
 
 @app.get("/api/instances")
-def read_instances() -> Dict[str, List[AWSInstance]]:
+def read_instances() -> dict[str, list[AWSInstance]]:
     """instances"""
     try:
         instances = list_managed_instances(config.region_list())
@@ -128,7 +127,7 @@ def read_instances() -> Dict[str, List[AWSInstance]]:
 class ApiConfig(BaseModel):
     """response for /api/config"""
 
-    regions: List[str]
+    regions: list[str]
 
 
 @app.get("/api/config")

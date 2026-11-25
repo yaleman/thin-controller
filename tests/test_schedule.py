@@ -1,6 +1,6 @@
 """Tests for schedule parsing and evaluation."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -63,7 +63,7 @@ def test_decide_schedule_action_starts_inside_window() -> None:
     )
     decision = decide_schedule_action(
         instance,
-        now=datetime(2026, 3, 31, 0, 0, tzinfo=timezone.utc),
+        now=datetime(2026, 3, 31, 0, 0, tzinfo=UTC),
     )
     assert decision.action == "start"
 
@@ -79,7 +79,7 @@ def test_decide_schedule_action_stops_outside_window() -> None:
     )
     decision = decide_schedule_action(
         instance,
-        now=datetime(2026, 3, 31, 8, 0, tzinfo=timezone.utc),
+        now=datetime(2026, 3, 31, 8, 0, tzinfo=UTC),
     )
     assert decision.action == "stop"
 
